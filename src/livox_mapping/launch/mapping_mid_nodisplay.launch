@@ -1,0 +1,26 @@
+<launch>
+
+  <arg name="rviz" default="true" />
+
+  <node pkg="livox_mapping" type="loam_scanRegistration" name="scanRegistration" output="screen">
+  </node>
+
+  <node pkg="livox_mapping" type="loam_laserMapping" name="laserMapping" output="screen">
+  <param name="map_file_path" type="string" value="/home/mpikh/data/thermo3d/map" />
+  <param name="filter_parameter_corner" type="double" value="0.1" />
+  <param name="filter_parameter_surf" type="double" value="0.2" />
+  <!-- <param name="filter_parameter_corner" type="double" value="0.2" />
+  <param name="filter_parameter_surf" type="double" value="0.4" /> -->
+  <!-- <param name="filter_parameter_corner" type="double" value="0.01" />
+  <param name="filter_parameter_surf" type="double" value="0.02" /> -->
+
+  </node>
+
+  <!-- <group if="$(arg rviz)">
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find livox_mapping)/rviz_cfg/loam_livox.rviz" />
+  </group> -->
+  <!-- <group if="$(arg rviz)">
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d /home/mpikh/Documents/rviz6.rviz" />
+  </group> -->
+
+</launch>
