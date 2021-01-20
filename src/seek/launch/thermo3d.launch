@@ -1,0 +1,27 @@
+<launch>
+<param name="/use_sim_time" value="true"/>
+  <node pkg="rosbag" type="play" name="rosbag_play" 
+  args="/home/mpikh/data/thermo3d/t3d_2021-01-20-11-52-30.bag
+  --clock
+  -r 1.0
+  -s 0.0
+  --topics  /livox/lidar /seek/image /seek/device_temperature_raw
+   /camera/imu /camera/odom/sample /tf
+   /tf:=/tf_old"/>
+  <node pkg="tf" type="static_transform_publisher" name="t265_to_livox"
+  args="0.005 0 -0.085 0 0 0 camera_pose_frame livox_frame 10" />
+  <node pkg="tf" type="static_transform_publisher" name="t265_to_livox1"
+  args="0.0 0 0.0 0 0 0 camera_odom_frame camera_init 10" />
+
+    <node name="remapper" pkg="tf_remapper_cpp" type="tf_remap">
+        <rosparam param="mappings">[{old: "camera_pose_frame", new: "camera_pose_frame"},
+        {old: "aft_mapped", new: ""}, {old: "camera_init", new: ""}]</rosparam>
+    </node>
+
+  <node pkg="t3d_utils" type="image_norm.py" name="image_norm" output="screen"/>
+  <include file="$(find livox_mapping)/launch/mapping_mid_nodisplay.launch" />
+    <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d /home/mpikh/Documents/t3d.rviz" />
+
+  <!-- <include file="$(find livox_ros_driver)/launch/livox_lidar.launch" />
+  <include file="$(find realsense2_camera)/launch/t265.launch" /> -->
+</launch>
